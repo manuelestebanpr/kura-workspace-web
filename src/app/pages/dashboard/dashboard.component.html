@@ -1,4 +1,86 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold text-sky-600">Dashboard</h1>
-  <p class="mt-2 text-gray-600">Module coming soon...</p>
+<div class="space-y-6">
+  <!-- Welcome Message -->
+  <div class="bg-gradient-to-r from-sky-500 to-sky-600 rounded-xl p-6 text-white shadow-lg">
+    <h1 class="text-2xl font-bold">Panel de Control — {{ labName }}</h1>
+    <p class="mt-2 text-sky-100">Bienvenido al sistema de gestión de laboratorio</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    @for (stat of stats; track stat.title) {
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <p class="text-sm font-medium text-gray-500">{{ stat.title }}</p>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span class="text-2xl font-bold" [class.text-red-600]="stat.alert" [class.text-gray-900]="!stat.alert">
+            {{ stat.value }}
+          </span>
+          @if (stat.trend) {
+            <span class="text-xs font-medium" [class.text-green-600]="stat.trendUp" [class.text-red-600]="!stat.trendUp">
+              {{ stat.trend }}
+            </span>
+          }
+        </div>
+        @if (stat.alert) {
+          <span class="inline-flex items-center gap-1 mt-2 text-xs font-medium text-red-600">
+            <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+            Requiere atención
+          </span>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="flex flex-wrap gap-3">
+    <a routerLink="/catalog/create" class="inline-flex items-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition shadow-sm">
+      <span>🧪</span>
+      <span>Nuevo Servicio</span>
+    </a>
+    <a routerLink="/import" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition shadow-sm">
+      <span>📤</span>
+      <span>Importar Pacientes</span>
+    </a>
+    <a routerLink="/results" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition shadow-sm">
+      <span>📋</span>
+      <span>Ver Resultados</span>
+    </a>
+  </div>
+
+  <!-- Recent Orders Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900">Órdenes Recientes</h3>
+      <a routerLink="/orders" class="text-sm font-medium text-sky-600 hover:text-sky-700">
+        Ver todas →
+      </a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orden #</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paciente</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @for (order of recentOrders; track order.orderNumber) {
+            <tr class="hover:bg-gray-50 transition">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-sky-600">{{ order.orderNumber }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ order.patient }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.date }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium" [class]="getStatusClass(order.status)">
+                  {{ getStatusLabel(order.status) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">{{ formatCurrency(order.total) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

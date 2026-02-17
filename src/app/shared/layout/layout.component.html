@@ -1,0 +1,85 @@
+<div class="flex min-h-screen bg-gray-50">
+  <!-- Mobile Sidebar Overlay -->
+  @if (sidebarOpen) {
+    <div 
+      class="fixed inset-0 bg-black/50 z-40 lg:hidden"
+      (click)="closeSidebar()">
+    </div>
+  }
+
+  <!-- Sidebar -->
+  <aside 
+    class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:transform-none"
+    [class.-translate-x-full]="!sidebarOpen"
+    [class.translate-x-0]="sidebarOpen">
+    
+    <!-- Logo -->
+    <div class="h-16 flex items-center px-6 border-b border-gray-200">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">K</span>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-gray-900">KURA</h1>
+          <p class="text-xs text-gray-500">Workspace</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="p-4 space-y-1">
+      @for (item of navItems; track item.route) {
+        <a 
+          [routerLink]="item.route"
+          routerLinkActive="bg-sky-50 text-sky-600 border-l-4 border-sky-500"
+          [routerLinkActiveOptions]="{exact: item.exact}"
+          (click)="closeSidebar()"
+          class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-r-lg transition-all duration-150">
+          <span class="text-lg">{{ item.icon }}</span>
+          <span class="font-medium">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Header -->
+    <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6">
+      <div class="flex items-center gap-4">
+        <!-- Mobile Menu Button -->
+        <button 
+          (click)="toggleSidebar()"
+          class="lg:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <h2 class="text-xl font-semibold text-gray-900">{{ pageTitle }}</h2>
+      </div>
+
+      <!-- User Info & Logout -->
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:flex items-center gap-3">
+          <div class="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center">
+            <span class="text-sky-600 font-medium text-sm">AD</span>
+          </div>
+          <div class="text-sm">
+            <p class="font-medium text-gray-900">Admin User</p>
+            <p class="text-gray-500">Lab Manager</p>
+          </div>
+        </div>
+        <button class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 p-4 lg:p-6 bg-gray-50 min-h-screen">
+      <router-outlet />
+    </main>
+  </div>
+</div>

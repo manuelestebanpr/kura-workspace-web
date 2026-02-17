@@ -1,4 +1,144 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold text-sky-600">catalog-list</h1>
-  <p class="mt-2 text-gray-600">Coming soon...</p>
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Catálogo de Servicios</h1>
+      <p class="mt-1 text-gray-500">Gestiona los servicios de laboratorio disponibles</p>
+    </div>
+    <a routerLink="/catalog/create" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition shadow-sm">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      <span>Nuevo Servicio</span>
+    </a>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 space-y-4">
+    <!-- Search -->
+    <div class="relative">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+        placeholder="Buscar por nombre, código o categoría..."
+        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
+    </div>
+
+    <!-- Type Tabs -->
+    <div class="flex gap-2">
+      <button 
+        (click)="onTypeChange('ALL')"
+        [class.bg-sky-500]="selectedType === 'ALL'"
+        [class.text-white]="selectedType === 'ALL'"
+        [class.bg-gray-100]="selectedType !== 'ALL'"
+        [class.text-gray-700]="selectedType !== 'ALL'"
+        class="px-4 py-2 rounded-lg font-medium transition">
+        Todos
+      </button>
+      <button 
+        (click)="onTypeChange('SINGLE')"
+        [class.bg-sky-500]="selectedType === 'SINGLE'"
+        [class.text-white]="selectedType === 'SINGLE'"
+        [class.bg-gray-100]="selectedType !== 'SINGLE'"
+        [class.text-gray-700]="selectedType !== 'SINGLE'"
+        class="px-4 py-2 rounded-lg font-medium transition">
+        Individuales
+      </button>
+      <button 
+        (click)="onTypeChange('BUNDLE')"
+        [class.bg-sky-500]="selectedType === 'BUNDLE'"
+        [class.text-white]="selectedType === 'BUNDLE'"
+        [class.bg-gray-100]="selectedType !== 'BUNDLE'"
+        [class.text-gray-700]="selectedType !== 'BUNDLE'"
+        class="px-4 py-2 rounded-lg font-medium transition">
+        Paquetes
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="flex justify-center py-12">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-sky-500"></div>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error) {
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+      {{ error }}
+    </div>
+  }
+
+  <!-- Services Table -->
+  @if (!loading && !error) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Precio Base</th>
+              <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (service of filteredServices; track service.code) {
+              <tr class="hover:bg-gray-50 transition">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600">{{ service.code }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{ service.name }}</p>
+                    @if (service.description) {
+                      <p class="text-xs text-gray-500 truncate max-w-xs">{{ service.description }}</p>
+                    }
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium" [class]="getTypeBadgeClass(service.serviceType)">
+                    {{ getTypeLabel(service.serviceType) }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ service.category }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">{{ formatCurrency(service.basePrice) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <div class="flex items-center justify-center gap-2">
+                    <button class="p-1.5 text-sky-600 hover:bg-sky-50 rounded-lg transition" title="Ver">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                      </svg>
+                    </button>
+                    <button class="p-1.5 text-gray-600 hover:bg-gray-100 rounded-lg transition" title="Editar">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (filteredServices.length === 0) {
+        <div class="text-center py-12">
+          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <p class="text-gray-500">No se encontraron servicios</p>
+        </div>
+      }
+    </div>
+  }
 </div>

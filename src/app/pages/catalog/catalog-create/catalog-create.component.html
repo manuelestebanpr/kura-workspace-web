@@ -1,4 +1,259 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold text-sky-600">catalog-create</h1>
-  <p class="mt-2 text-gray-600">Coming soon...</p>
+<div class="max-w-3xl mx-auto space-y-6">
+  <!-- Header -->
+  <div class="flex items-center gap-4">
+    <a routerLink="/catalog" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+    </a>
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Nuevo Servicio</h1>
+      <p class="text-gray-500">Crea un nuevo servicio o paquete de laboratorio</p>
+    </div>
+  </div>
+
+  <!-- Custom Warning Modal -->
+  @if (showCustomWarning) {
+    <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">⚠️ Advertencia</h3>
+            <p class="mt-2 text-gray-600">No es recomendado crear servicios personalizados desde esta interfaz. Los servicios personalizados deben ser creados mediante el sistema de administración principal.</p>
+            <div class="mt-4 flex gap-3">
+              <button 
+                (click)="closeCustomWarning()"
+                class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                Entendido
+              </button>
+              <button 
+                (click)="serviceForm.patchValue({isCustom: false}); closeCustomWarning()"
+                class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition">
+                Desmarcar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Success Message -->
+  @if (success) {
+    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <div>
+        <p class="font-medium text-emerald-800">¡Servicio creado exitosamente!</p>
+        <p class="text-sm text-emerald-600">Redirigiendo al catálogo...</p>
+      </div>
+    </div>
+  }
+
+  <!-- Error Message -->
+  @if (error) {
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+      {{ error }}
+    </div>
+  }
+
+  <!-- Form -->
+  <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 space-y-6">
+      
+      <!-- Service Type -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-3">Tipo de Servicio</label>
+        <div class="flex gap-4">
+          <label class="flex-1 cursor-pointer">
+            <input 
+              type="radio" 
+              formControlName="serviceType" 
+              value="SINGLE"
+              (change)="onTypeChange()"
+              class="sr-only peer">
+            <div class="p-4 border-2 border-gray-200 rounded-xl peer-checked:border-sky-500 peer-checked:bg-sky-50 transition text-center">
+              <div class="text-2xl mb-2">🧪</div>
+              <p class="font-medium text-gray-900">Individual</p>
+              <p class="text-xs text-gray-500 mt-1">Un solo análisis o prueba</p>
+            </div>
+          </label>
+          <label class="flex-1 cursor-pointer">
+            <input 
+              type="radio" 
+              formControlName="serviceType" 
+              value="BUNDLE"
+              (change)="onTypeChange()"
+              class="sr-only peer">
+            <div class="p-4 border-2 border-gray-200 rounded-xl peer-checked:border-sky-500 peer-checked:bg-sky-50 transition text-center">
+              <div class="text-2xl mb-2">📦</div>
+              <p class="font-medium text-gray-900">Paquete</p>
+              <p class="text-xs text-gray-500 mt-1">Conjunto de servicios relacionados</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Código *</label>
+          <input 
+            type="text" 
+            formControlName="code"
+            placeholder="LAB-001"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition"
+            [class.border-red-300]="serviceForm.get('code')?.invalid && serviceForm.get('code')?.touched">
+          @if (serviceForm.get('code')?.invalid && serviceForm.get('code')?.touched) {
+            <p class="mt-1 text-xs text-red-600">Código requerido (solo mayúsculas, números y guiones)</p>
+          }
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+          <input 
+            type="text" 
+            formControlName="name"
+            placeholder="Hemograma Completo"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition"
+            [class.border-red-300]="serviceForm.get('name')?.invalid && serviceForm.get('name')?.touched">
+          @if (serviceForm.get('name')?.invalid && serviceForm.get('name')?.touched) {
+            <p class="mt-1 text-xs text-red-600">Nombre requerido (mínimo 3 caracteres)</p>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+        <textarea 
+          formControlName="description"
+          rows="3"
+          placeholder="Descripción detallada del servicio..."
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition resize-none"></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Categoría *</label>
+          <select 
+            formControlName="category"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition"
+            [class.border-red-300]="serviceForm.get('category')?.invalid && serviceForm.get('category')?.touched">
+            <option value="">Seleccionar categoría</option>
+            @for (cat of categories; track cat) {
+              <option [value]="cat">{{ cat }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Precio Base *</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+            <input 
+              type="number" 
+              formControlName="basePrice"
+              placeholder="0"
+              min="0"
+              class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition"
+              [class.border-red-300]="serviceForm.get('basePrice')?.invalid && serviceForm.get('basePrice')?.touched">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bundle Child Services -->
+      @if (isBundle) {
+        <div class="border-t border-gray-100 pt-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">Servicios Incluidos</label>
+          
+          <!-- Search -->
+          <div class="relative mb-4">
+            <input 
+              type="text" 
+              [(ngModel)]="childServiceSearch"
+              [ngModelOptions]="{standalone: true}"
+              placeholder="Buscar servicio para agregar..."
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
+            
+            <!-- Dropdown Results -->
+            @if (childServiceSearch && filteredAvailableServices.length > 0) {
+              <div class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                @for (service of filteredAvailableServices; track service.id) {
+                  <button 
+                    type="button"
+                    (click)="addChildService(service)"
+                    class="w-full px-4 py-2 text-left hover:bg-gray-50 transition flex items-center justify-between">
+                    <span>{{ service.name }}</span>
+                    <span class="text-xs text-gray-500">{{ service.code }}</span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Selected Services -->
+          <div class="space-y-2">
+            @for (service of selectedChildServices; track service.id) {
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 bg-sky-500 rounded-full"></span>
+                  <span class="font-medium text-gray-900">{{ service.name }}</span>
+                  <span class="text-xs text-gray-500">{{ service.code }}</span>
+                </div>
+                <button 
+                  type="button"
+                  (click)="removeChildService(service)"
+                  class="p-1 text-red-500 hover:bg-red-50 rounded transition">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+            }
+            @if (selectedChildServices.length === 0) {
+              <p class="text-sm text-gray-500 text-center py-4">No hay servicios seleccionados</p>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Custom Checkbox -->
+      <div class="border-t border-gray-100 pt-6">
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input 
+            type="checkbox" 
+            formControlName="isCustom"
+            class="w-4 h-4 text-sky-500 border-gray-300 rounded focus:ring-sky-500">
+          <span class="text-sm text-gray-700">Servicio personalizado</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3">
+      <a routerLink="/catalog" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+        Cancelar
+      </a>
+      <button 
+        type="submit"
+        [disabled]="loading || serviceForm.invalid"
+        class="px-6 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-2">
+        @if (loading) {
+          <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        }
+        <span>Crear Servicio</span>
+      </button>
+    </div>
+  </form>
 </div>
