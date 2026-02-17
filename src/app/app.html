@@ -1,0 +1,40 @@
+<!-- KURA Workspace — Lab Backoffice -->
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-900 text-white flex flex-col">
+    <div class="p-6">
+      <h1 class="text-xl font-bold text-sky-400">KURA Workspace</h1>
+    </div>
+    <nav class="flex-1 px-4 space-y-1">
+      <a routerLink="/" routerLinkActive="bg-gray-800" [routerLinkActiveOptions]="{exact:true}"
+         class="block px-4 py-2.5 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        📊 Dashboard
+      </a>
+      <a routerLink="/catalog" routerLinkActive="bg-gray-800"
+         class="block px-4 py-2.5 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        🧪 Catálogo
+      </a>
+      <a routerLink="/orders" routerLinkActive="bg-gray-800"
+         class="block px-4 py-2.5 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        📋 Órdenes
+      </a>
+      <a routerLink="/results" routerLinkActive="bg-gray-800"
+         class="block px-4 py-2.5 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        📄 Resultados
+      </a>
+      <a routerLink="/inventory" routerLinkActive="bg-gray-800"
+         class="block px-4 py-2.5 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        📦 Inventario
+      </a>
+      <a routerLink="/import" routerLinkActive="bg-gray-800"
+         class="block px-4 py-2.5 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition">
+        📥 Importar CSV
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 bg-gray-50">
+    <router-outlet />
+  </main>
+</div>
