@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { ApiService, Order, OrderItem } from '../../services/api.service';
 
 interface ExpandedOrder extends Order {
@@ -10,7 +11,7 @@ interface ExpandedOrder extends Order {
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss']
 })

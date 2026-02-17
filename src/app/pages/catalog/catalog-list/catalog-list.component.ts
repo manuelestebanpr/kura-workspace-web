@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { ApiService, Service } from '../../../services/api.service';
 
 type ServiceType = 'ALL' | 'SINGLE' | 'BUNDLE';
@@ -9,7 +10,7 @@ type ServiceType = 'ALL' | 'SINGLE' | 'BUNDLE';
 @Component({
   selector: 'app-catalog-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule],
   templateUrl: './catalog-list.component.html',
   styleUrls: ['./catalog-list.component.scss']
 })

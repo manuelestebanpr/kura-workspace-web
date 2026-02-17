@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 // TODO: This page reads from warehouse_inventory which isn't exposed via API yet
 // When API is ready, replace hardcoded data with ApiService calls
@@ -17,7 +18,7 @@ type StockStatus = 'OK' | 'LOW' | 'CRITICAL';
 @Component({
   selector: 'app-inventory',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss']
 })

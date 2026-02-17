@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { ApiService, Service } from '../../../services/api.service';
 
 interface ChildService {
@@ -13,7 +14,7 @@ interface ChildService {
 @Component({
   selector: 'app-catalog-create',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, FormsModule, TranslateModule],
   templateUrl: './catalog-create.component.html',
   styleUrls: ['./catalog-create.component.scss']
 })

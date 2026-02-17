@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import * as Papa from 'papaparse';
 import { ApiService, ImportResult } from '../../services/api.service';
 
@@ -11,7 +12,7 @@ interface CsvRow {
 @Component({
   selector: 'app-import',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.scss']
 })
@@ -29,11 +30,11 @@ export class ImportComponent {
 
   // Available field mappings
   availableFields = [
-    { value: 'cedula', label: 'Cédula' },
-    { value: 'fullName', label: 'Nombre Completo' },
-    { value: 'email', label: 'Correo Electrónico' },
-    { value: 'phone', label: 'Teléfono' },
-    { value: 'skip', label: 'Omitir columna' },
+    { value: 'cedula', labelKey: 'IMPORT.FIELD_CEDULA' },
+    { value: 'fullName', labelKey: 'IMPORT.FIELD_FULL_NAME' },
+    { value: 'email', labelKey: 'IMPORT.FIELD_EMAIL' },
+    { value: 'phone', labelKey: 'IMPORT.FIELD_PHONE' },
+    { value: 'skip', labelKey: 'IMPORT.FIELD_SKIP' },
   ];
 
   constructor(private apiService: ApiService) {}
@@ -145,6 +146,6 @@ export class ImportComponent {
 
   getFieldLabel(fieldValue: string): string {
     const field = this.availableFields.find(f => f.value === fieldValue);
-    return field ? field.label : '';
+    return field ? field.labelKey : '';
   }
 }

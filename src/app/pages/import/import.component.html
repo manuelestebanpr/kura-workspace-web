@@ -1,7 +1,7 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <!-- Header -->
   <div>
-    <h1 class="text-2xl font-bold text-gray-900">Importar Pacientes</h1>
+    <h1 class="text-2xl font-bold text-gray-900">{{ 'IMPORT.TITLE' | translate }}</h1>
     <p class="mt-1 text-gray-500">Carga masiva de pacientes desde archivo CSV</p>
   </div>
 
@@ -14,27 +14,27 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-emerald-800">Importación Completada</h3>
+        <h3 class="text-lg font-semibold text-emerald-800">{{ 'IMPORT.RESULT_TITLE' | translate }}</h3>
       </div>
       
       <div class="grid grid-cols-3 gap-4 mb-4">
         <div class="bg-white rounded-lg p-4 text-center border border-emerald-100">
           <p class="text-2xl font-bold text-emerald-600">{{ importResult.imported }}</p>
-          <p class="text-sm text-gray-600">Importados</p>
+          <p class="text-sm text-gray-600">{{ 'IMPORT.RESULT_IMPORTED' | translate }}</p>
         </div>
         <div class="bg-white rounded-lg p-4 text-center border border-emerald-100">
           <p class="text-2xl font-bold text-blue-600">{{ importResult.updated }}</p>
-          <p class="text-sm text-gray-600">Actualizados</p>
+          <p class="text-sm text-gray-600">{{ 'IMPORT.RESULT_UPDATED' | translate }}</p>
         </div>
         <div class="bg-white rounded-lg p-4 text-center border border-emerald-100">
           <p class="text-2xl font-bold text-red-600">{{ importResult.errors }}</p>
-          <p class="text-sm text-gray-600">Errores</p>
+          <p class="text-sm text-gray-600">{{ 'IMPORT.RESULT_ERRORS' | translate }}</p>
         </div>
       </div>
 
       @if (importResult.details && importResult.details.length > 0) {
         <div class="bg-white rounded-lg p-4 border border-emerald-100">
-          <p class="font-medium text-gray-700 mb-2">Detalles:</p>
+          <p class="font-medium text-gray-700 mb-2">{{ 'IMPORT.RESULT_DETAILS' | translate }}:</p>
           <ul class="text-sm text-gray-600 space-y-1">
             @for (detail of importResult.details; track detail) {
               <li>{{ detail }}</li>
@@ -46,7 +46,7 @@
       <button 
         (click)="clearFile()"
         class="mt-4 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition">
-        Importar Otro Archivo
+        {{ 'IMPORT.IMPORT_BTN' | translate }}
       </button>
     </div>
   }
@@ -75,18 +75,18 @@
         </svg>
       </div>
       
-      <p class="text-lg font-medium text-gray-900 mb-2">Arrastra tu archivo CSV aquí</p>
-      <p class="text-gray-500 mb-4">o</p>
+      <p class="text-lg font-medium text-gray-900 mb-2">{{ 'IMPORT.UPLOAD_DRAG' | translate }}</p>
+      <p class="text-gray-500 mb-4">{{ 'IMPORT.UPLOAD_CLICK' | translate }}</p>
       
       <label class="inline-flex items-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition cursor-pointer">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
-        <span>Seleccionar Archivo</span>
+        <span>{{ 'IMPORT.UPLOAD_CLICK' | translate }}</span>
         <input type="file" accept=".csv" class="hidden" (change)="onFileSelect($event)">
       </label>
       
-      <p class="mt-4 text-sm text-gray-400">Formato: CSV con columnas cedula, nombre, email, telefono</p>
+      <p class="mt-4 text-sm text-gray-400">{{ 'IMPORT.UPLOAD_FORMAT' | translate }}</p>
     </div>
   }
 
@@ -103,11 +103,12 @@
           </div>
           <div>
             <p class="font-medium text-gray-900">{{ file.name }}</p>
-            <p class="text-sm text-gray-500">{{ csvData.length }} registros encontrados</p>
+            <p class="text-sm text-gray-500">{{ csvData.length }} {{ 'IMPORT.PREVIEW_TITLE' | translate }}</p>
           </div>
         </div>
         <button 
           (click)="clearFile()"
+          [title]="'IMPORT.CLEAR' | translate"
           class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -117,8 +118,8 @@
 
       <!-- Column Mapping -->
       <div class="p-6 border-b border-gray-100">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Mapeo de Columnas</h3>
-        <p class="text-sm text-gray-500 mb-4">Seleccione a qué campo corresponde cada columna del CSV:</p>
+        <h3 class="text-lg font-medium text-gray-900 mb-4">{{ 'IMPORT.MAPPING_TITLE' | translate }}</h3>
+        <p class="text-sm text-gray-500 mb-4">{{ 'IMPORT.MAPPING_CSV_COLUMN' | translate }}:</p>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           @for (header of csvHeaders; track header) {
@@ -128,7 +129,7 @@
                 [(ngModel)]="columnMapping[header]"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
                 @for (field of availableFields; track field.value) {
-                  <option [value]="field.value">{{ field.label }}</option>
+                  <option [value]="field.value">{{ field.labelKey | translate }}</option>
                 }
               </select>
             </div>
@@ -138,7 +139,7 @@
 
       <!-- Preview Table -->
       <div class="p-6">
-        <h3 class="text-lg font-medium text-gray-900 mb-4">Vista Previa (primeras 5 filas)</h3>
+        <h3 class="text-lg font-medium text-gray-900 mb-4">{{ 'IMPORT.PREVIEW_TITLE' | translate }}</h3>
         
         <div class="overflow-x-auto">
           <table class="w-full border border-gray-200 rounded-lg">
@@ -148,7 +149,7 @@
                   <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                     {{ header }}
                     @if (columnMapping[header] && columnMapping[header] !== 'skip') {
-                      <span class="ml-1 text-sky-600">→ {{ getFieldLabel(columnMapping[header]) }}</span>
+                      <span class="ml-1 text-sky-600">→ {{ getFieldLabel(columnMapping[header]) | translate }}</span>
                     }
                   </th>
                 }
@@ -179,7 +180,7 @@
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           }
-          <span>Importar {{ csvData.length }} Pacientes</span>
+          <span>{{ 'IMPORT.IMPORT_BTN' | translate }}</span>
         </button>
       </div>
     </div>

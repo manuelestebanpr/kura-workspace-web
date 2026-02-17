@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface StatCard {
-  title: string;
+  titleKey: string;
   value: string;
   trend?: string;
   trendUp?: boolean;
@@ -21,7 +22,7 @@ interface RecentOrder {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -29,10 +30,10 @@ export class DashboardComponent {
   labName = 'Laboratorio Central KURA';
 
   stats: StatCard[] = [
-    { title: 'Total Órdenes', value: '142', trend: '+12%', trendUp: true },
-    { title: 'Órdenes Pendientes', value: '23', trend: '-5%', trendUp: false },
-    { title: 'Servicios Activos', value: '38' },
-    { title: 'Inventario Bajo', value: '5', alert: true },
+    { titleKey: 'DASHBOARD.TOTAL_ORDERS', value: '142', trend: '+12%', trendUp: true },
+    { titleKey: 'DASHBOARD.PENDING_ORDERS', value: '23', trend: '-5%', trendUp: false },
+    { titleKey: 'DASHBOARD.ACTIVE_SERVICES', value: '38' },
+    { titleKey: 'DASHBOARD.LOW_INVENTORY', value: '5', alert: true },
   ];
 
   recentOrders: RecentOrder[] = [

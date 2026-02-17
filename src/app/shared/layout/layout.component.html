@@ -21,7 +21,7 @@
         </div>
         <div>
           <h1 class="text-lg font-bold text-gray-900">KURA</h1>
-          <p class="text-xs text-gray-500">Workspace</p>
+          <p class="text-xs text-gray-500">{{ 'LAYOUT.WORKSPACE' | translate }}</p>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
           (click)="closeSidebar()"
           class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-r-lg transition-all duration-150">
           <span class="text-lg">{{ item.icon }}</span>
-          <span class="font-medium">{{ item.label }}</span>
+          <span class="font-medium">{{ item.labelKey | translate }}</span>
         </a>
       }
     </nav>
@@ -55,7 +55,6 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </button>
-        <h2 class="text-xl font-semibold text-gray-900">{{ pageTitle }}</h2>
       </div>
 
       <!-- User Info & Logout -->
@@ -69,7 +68,9 @@
             <p class="text-gray-500">Lab Manager</p>
           </div>
         </div>
-        <button class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+        <button 
+          [title]="'NAV.LOGOUT' | translate"
+          class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
           </svg>

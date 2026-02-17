@@ -7,7 +7,7 @@
       </svg>
     </a>
     <div>
-      <h1 class="text-2xl font-bold text-gray-900">Nuevo Servicio</h1>
+      <h1 class="text-2xl font-bold text-gray-900">{{ 'CATALOG.CREATE_TITLE' | translate }}</h1>
       <p class="text-gray-500">Crea un nuevo servicio o paquete de laboratorio</p>
     </div>
   </div>
@@ -23,18 +23,18 @@
             </svg>
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-gray-900">⚠️ Advertencia</h3>
-            <p class="mt-2 text-gray-600">No es recomendado crear servicios personalizados desde esta interfaz. Los servicios personalizados deben ser creados mediante el sistema de administración principal.</p>
+            <h3 class="text-lg font-semibold text-gray-900">{{ 'CATALOG.CUSTOM_WARNING' | translate }}</h3>
+            <p class="mt-2 text-gray-600">{{ 'CATALOG.CUSTOM_WARNING' | translate }}</p>
             <div class="mt-4 flex gap-3">
               <button 
                 (click)="closeCustomWarning()"
                 class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
-                Entendido
+                {{ 'CATALOG.CANCEL' | translate }}
               </button>
               <button 
                 (click)="serviceForm.patchValue({isCustom: false}); closeCustomWarning()"
                 class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition">
-                Desmarcar
+                {{ 'CATALOG.CANCEL' | translate }}
               </button>
             </div>
           </div>
@@ -52,7 +52,7 @@
         </svg>
       </div>
       <div>
-        <p class="font-medium text-emerald-800">¡Servicio creado exitosamente!</p>
+        <p class="font-medium text-emerald-800">{{ 'CATALOG.SUBMIT' | translate }}</p>
         <p class="text-sm text-emerald-600">Redirigiendo al catálogo...</p>
       </div>
     </div>
@@ -71,7 +71,7 @@
       
       <!-- Service Type -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-3">Tipo de Servicio</label>
+        <label class="block text-sm font-medium text-gray-700 mb-3">{{ 'CATALOG.FORM_TYPE' | translate }}</label>
         <div class="flex gap-4">
           <label class="flex-1 cursor-pointer">
             <input 
@@ -82,7 +82,7 @@
               class="sr-only peer">
             <div class="p-4 border-2 border-gray-200 rounded-xl peer-checked:border-sky-500 peer-checked:bg-sky-50 transition text-center">
               <div class="text-2xl mb-2">🧪</div>
-              <p class="font-medium text-gray-900">Individual</p>
+              <p class="font-medium text-gray-900">{{ 'CATALOG.FORM_TYPE_SINGLE' | translate }}</p>
               <p class="text-xs text-gray-500 mt-1">Un solo análisis o prueba</p>
             </div>
           </label>
@@ -95,7 +95,7 @@
               class="sr-only peer">
             <div class="p-4 border-2 border-gray-200 rounded-xl peer-checked:border-sky-500 peer-checked:bg-sky-50 transition text-center">
               <div class="text-2xl mb-2">📦</div>
-              <p class="font-medium text-gray-900">Paquete</p>
+              <p class="font-medium text-gray-900">{{ 'CATALOG.FORM_TYPE_BUNDLE' | translate }}</p>
               <p class="text-xs text-gray-500 mt-1">Conjunto de servicios relacionados</p>
             </div>
           </label>
@@ -105,7 +105,7 @@
       <!-- Basic Info -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Código *</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'CATALOG.FORM_CODE' | translate }} *</label>
           <input 
             type="text" 
             formControlName="code"
@@ -118,7 +118,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'CATALOG.FORM_NAME' | translate }} *</label>
           <input 
             type="text" 
             formControlName="name"
@@ -132,7 +132,7 @@
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'CATALOG.FORM_DESCRIPTION' | translate }}</label>
         <textarea 
           formControlName="description"
           rows="3"
@@ -142,12 +142,12 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Categoría *</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'CATALOG.FORM_CATEGORY' | translate }} *</label>
           <select 
             formControlName="category"
             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition"
             [class.border-red-300]="serviceForm.get('category')?.invalid && serviceForm.get('category')?.touched">
-            <option value="">Seleccionar categoría</option>
+            <option value="">{{ 'CATALOG.FORM_CATEGORY' | translate }}</option>
             @for (cat of categories; track cat) {
               <option [value]="cat">{{ cat }}</option>
             }
@@ -155,7 +155,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Precio Base *</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'CATALOG.FORM_BASE_PRICE' | translate }} *</label>
           <div class="relative">
             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
             <input 
@@ -172,7 +172,7 @@
       <!-- Bundle Child Services -->
       @if (isBundle) {
         <div class="border-t border-gray-100 pt-6">
-          <label class="block text-sm font-medium text-gray-700 mb-3">Servicios Incluidos</label>
+          <label class="block text-sm font-medium text-gray-700 mb-3">{{ 'CATALOG.BUNDLE_ITEMS' | translate }}</label>
           
           <!-- Search -->
           <div class="relative mb-4">
@@ -180,7 +180,7 @@
               type="text" 
               [(ngModel)]="childServiceSearch"
               [ngModelOptions]="{standalone: true}"
-              placeholder="Buscar servicio para agregar..."
+              [placeholder]="'CATALOG.SEARCH_PLACEHOLDER' | translate"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
             
             <!-- Dropdown Results -->
@@ -232,7 +232,7 @@
             type="checkbox" 
             formControlName="isCustom"
             class="w-4 h-4 text-sky-500 border-gray-300 rounded focus:ring-sky-500">
-          <span class="text-sm text-gray-700">Servicio personalizado</span>
+          <span class="text-sm text-gray-700">{{ 'CATALOG.FORM_IS_CUSTOM' | translate }}</span>
         </label>
       </div>
     </div>
@@ -240,7 +240,7 @@
     <!-- Actions -->
     <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3">
       <a routerLink="/catalog" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-        Cancelar
+        {{ 'CATALOG.CANCEL' | translate }}
       </a>
       <button 
         type="submit"
@@ -252,7 +252,7 @@
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         }
-        <span>Crear Servicio</span>
+        <span>{{ 'CATALOG.SUBMIT' | translate }}</span>
       </button>
     </div>
   </form>

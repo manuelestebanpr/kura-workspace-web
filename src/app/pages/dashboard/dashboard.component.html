@@ -1,15 +1,15 @@
 <div class="space-y-6">
   <!-- Welcome Message -->
   <div class="bg-gradient-to-r from-sky-500 to-sky-600 rounded-xl p-6 text-white shadow-lg">
-    <h1 class="text-2xl font-bold">Panel de Control — {{ labName }}</h1>
+    <h1 class="text-2xl font-bold">{{ 'DASHBOARD.TITLE' | translate }} — {{ labName }}</h1>
     <p class="mt-2 text-sky-100">Bienvenido al sistema de gestión de laboratorio</p>
   </div>
 
   <!-- Stats Cards -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-    @for (stat of stats; track stat.title) {
+    @for (stat of stats; track stat.titleKey) {
       <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-        <p class="text-sm font-medium text-gray-500">{{ stat.title }}</p>
+        <p class="text-sm font-medium text-gray-500">{{ stat.titleKey | translate }}</p>
         <div class="mt-2 flex items-baseline gap-2">
           <span class="text-2xl font-bold" [class.text-red-600]="stat.alert" [class.text-gray-900]="!stat.alert">
             {{ stat.value }}
@@ -34,35 +34,35 @@
   <div class="flex flex-wrap gap-3">
     <a routerLink="/catalog/create" class="inline-flex items-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition shadow-sm">
       <span>🧪</span>
-      <span>Nuevo Servicio</span>
+      <span>{{ 'DASHBOARD.NEW_SERVICE' | translate }}</span>
     </a>
     <a routerLink="/import" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition shadow-sm">
       <span>📤</span>
-      <span>Importar Pacientes</span>
+      <span>{{ 'DASHBOARD.IMPORT_PATIENTS' | translate }}</span>
     </a>
     <a routerLink="/results" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition shadow-sm">
       <span>📋</span>
-      <span>Ver Resultados</span>
+      <span>{{ 'DASHBOARD.VIEW_RESULTS' | translate }}</span>
     </a>
   </div>
 
   <!-- Recent Orders Table -->
   <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-      <h3 class="text-lg font-semibold text-gray-900">Órdenes Recientes</h3>
+      <h3 class="text-lg font-semibold text-gray-900">{{ 'DASHBOARD.RECENT_ORDERS' | translate }}</h3>
       <a routerLink="/orders" class="text-sm font-medium text-sky-600 hover:text-sky-700">
-        Ver todas →
+        {{ 'COMMON.SEARCH' | translate }} →
       </a>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orden #</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paciente</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'DASHBOARD.ORDER_NUMBER' | translate }}</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'DASHBOARD.PATIENT' | translate }}</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'DASHBOARD.DATE' | translate }}</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'DASHBOARD.STATUS' | translate }}</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'DASHBOARD.TOTAL' | translate }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
